@@ -12,12 +12,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"Belajar-Golang-1.1/cjson"
-	"Belajar-Golang-1.1/struck"
+	"Belajar-Golang-1.1/cjson"  // Modul untuk format respon JSON
+	"Belajar-Golang-1.1/struck" // Modul struct data WarehouseItem
 )
 
-var collection *mongo.Collection
+var collection *mongo.Collection // Variabel global untuk koleksi MongoDB
 
+// Fungsi untuk menghubungkan aplikasi ke MongoDB
 func connectDB() *mongo.Client {
 	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
@@ -25,6 +26,7 @@ func connectDB() *mongo.Client {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
 	err = client.Connect(ctx)
 	if err != nil {
 		log.Fatal(err)
@@ -33,31 +35,33 @@ func connectDB() *mongo.Client {
 }
 
 func main() {
-	app := fiber.New()
+	app := fiber.New() // Membuat instance aplikasi Fiber
 
-	app.Use(cors.New())
+	app.Use(cors.New()) // Mengaktifkan middleware CORS
 
-	client := connectDB()
-	collection = client.Database("warehouse").Collection("items")
+	client := connectDB()                                         // Menghubungkan ke database
+	collection = client.Database("warehouse").Collection("items") // Mengakses koleksi "items" di DB "warehouse"
 
-	// Serve static files from public directory
+	// Menyajikan file statis dari folder ./public
 	app.Static("/", "./public")
 
-	app.Get("/api/items", getItems)
-	app.Get("/api/items/:id", getItem)
-	app.Post("/api/items", createItem)
-	app.Put("/api/items/:id", updateItem)
-	app.Delete("/api/items/:id", deleteItem)
+	// Daftar endpoint (API route)
+	app.Get("/api/items", getItems)          // Ambil semua data
+	app.Get("/api/items/:id", getItem)       // Ambil data berdasarkan ID
+	app.Post("/api/items", createItem)       // Tambah data baru
+	app.Put("/api/items/:id", updateItem)    // Perbarui data berdasarkan ID
+	app.Delete("/api/items/:id", deleteItem) // Hapus data berdasarkan ID
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":3000")) // Jalankan server di port 3000
 }
 
+// Fungsi untuk menambahkan item baru ke database
 func createItem(c *fiber.Ctx) error {
 	item := new(struck.WarehouseItem)
 	if err := c.BodyParser(item); err != nil {
 		return cjson.JSONResponse(c, fiber.StatusBadRequest, fiber.Map{"error": "cannot parse JSON"})
 	}
-	item.ID = primitive.NewObjectID()
+	item.ID = primitive.NewObjectID() // Buat ID baru otomatis
 	_, err := collection.InsertOne(context.Background(), item)
 	if err != nil {
 		return cjson.JSONResponse(c, fiber.StatusInternalServerError, fiber.Map{"error": "cannot insert item"})
@@ -65,8 +69,9 @@ func createItem(c *fiber.Ctx) error {
 	return cjson.JSONResponse(c, fiber.StatusCreated, item)
 }
 
+// Fungsi untuk mengambil semua item dari database
 func getItems(c *fiber.Ctx) error {
-	cursor, err := collection.Find(context.Background(), bson.M{})
+	cursor, err := collection.Find(context.Background(), bson.M{}) // bson.M{} berarti ambil semua data
 	if err != nil {
 		return cjson.JSONResponse(c, fiber.StatusInternalServerError, fiber.Map{"error": "cannot fetch items"})
 	}
@@ -77,9 +82,10 @@ func getItems(c *fiber.Ctx) error {
 	return cjson.JSONResponse(c, fiber.StatusOK, items)
 }
 
+// Fungsi untuk mengambil satu item berdasarkan ID
 func getItem(c *fiber.Ctx) error {
 	idParam := c.Params("id")
-	id, err := primitive.ObjectIDFromHex(idParam)
+	id, err := primitive.ObjectIDFromHex(idParam) // Konversi string ke ObjectID
 	if err != nil {
 		return cjson.JSONResponse(c, fiber.StatusBadRequest, fiber.Map{"error": "invalid id"})
 	}
@@ -91,6 +97,7 @@ func getItem(c *fiber.Ctx) error {
 	return cjson.JSONResponse(c, fiber.StatusOK, item)
 }
 
+// Fungsi untuk memperbarui data item berdasarkan ID
 func updateItem(c *fiber.Ctx) error {
 	idParam := c.Params("id")
 	id, err := primitive.ObjectIDFromHex(idParam)
@@ -113,9 +120,11 @@ func updateItem(c *fiber.Ctx) error {
 	if err != nil {
 		return cjson.JSONResponse(c, fiber.StatusInternalServerError, fiber.Map{"error": "cannot update item"})
 	}
-	item.ID = id
+	item.ID = id // Set ID kembali agar konsisten
 	return cjson.JSONResponse(c, fiber.StatusOK, item)
 }
+
+// Fungsi untuk menghapus data item berdasarkan ID
 func deleteItem(c *fiber.Ctx) error {
 	idParam := c.Params("id")
 	id, err := primitive.ObjectIDFromHex(idParam)
@@ -126,5 +135,5 @@ func deleteItem(c *fiber.Ctx) error {
 	if err != nil {
 		return cjson.JSONResponse(c, fiber.StatusInternalServerError, fiber.Map{"error": "cannot delete item"})
 	}
-	return c.SendStatus(fiber.StatusNoContent)
+	return c.SendStatus(fiber.StatusNoContent) // 204 No Content
 }
