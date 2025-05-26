@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Warehouse Inventory Charts</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">WarehouseApp</div>
+            <div class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="inventory.html">Inventory</a>
+                <a href="add_item.html">Add Item</a>
+                <a href="graphiccharts.html">Charts</a>
+            </div>
+        </nav>
+    </header>
+    <main class="main">
+        <h1>Warehouse Inventory Charts</h1>
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2 id="chartTitle">Bar Chart - Total Quantity by Name</h2>
+                <select id="chartTypeSelector" aria-label="Select chart type">
+                    <option value="bar">Bar Chart</option>
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                </select>
+            </div>
+            <canvas id="chartCanvas"></canvas>
+        </div>
+        <div class="footer">
+            Data source: MongoDB Warehouse Inventory
+        </div>
+    </main>
+    <script src="js/menu.js"></script>
+    <script src="js/graphiccharts.js"></script>
+</body>
+</html>
