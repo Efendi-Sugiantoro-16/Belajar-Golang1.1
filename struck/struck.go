@@ -10,3 +10,4 @@ type WarehouseItem struct {
 	Quantity    int                `json:"quantity" bson:"quantity"`
 	Location    string             `json:"location" bson:"location"`
 }
+??
