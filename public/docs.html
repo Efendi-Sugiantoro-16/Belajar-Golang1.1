@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Warehouse App Documentation</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        main.docs-main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        nav.docs-nav {
+            background-color: #34495e;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav.docs-nav a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav.docs-nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="docs-nav">
+            <a href="index.html">Home</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="add_item.html">Add Item</a>
+            <a href="edit_item.html">Edit Item</a>
+            <a href="graphiccharts.html">Charts</a>
+            <a href="docs.html">Documentation</a>
+        </nav>
+    </header>
+    <main class="docs-main">
+        <h1>Warehouse Management App Documentation</h1>
+        <section>
+            <h2>Overview</h2>
+            <p>This Warehouse Management App allows users to manage warehouse inventory efficiently. Users can view, add, edit, and delete inventory items, as well as visualize inventory data through charts.</p>
+        </section>
+        <section>
+            <h2>Features</h2>
+            <h3>Inventory Management</h3>
+            <p>View all items in the warehouse, including their name, description, quantity, and location. Items can be edited or deleted directly from the inventory page.</p>
+            <h3>Add New Item</h3>
+            <p>Use the Add Item page to add new inventory items by providing the name, description, quantity, and location.</p>
+            <h3>Edit Item</h3>
+            <p>Edit existing items by clicking the Edit button on the inventory page, which redirects to the Edit Item page.</p>
+            <h3>Charts</h3>
+            <p>Visualize inventory data with bar, line, and pie charts. Select the chart type from the dropdown menu on the Charts page.</p>
+        </section>
+        <section>
+            <h2>API Endpoints</h2>
+            <p>The app communicates with a backend API to manage inventory items. The following endpoints are used:</p>
+            <ul>
+                <li><strong>GET /api/items</strong>: Retrieve all inventory items.</li>
+                <li><strong>POST /api/items</strong>: Add a new inventory item. Requires JSON body with name, description, quantity, and location.</li>
+                <li><strong>PUT /api/items/{id}</strong>: Update an existing item by ID. Requires JSON body with updated fields.</li>
+                <li><strong>DELETE /api/items/{id}</strong>: Delete an item by ID.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Special Tips & FAQs</h2>
+            <h3>How to delete an item?</h3>
+            <p>On the Inventory page, click the Delete button next to the item you want to remove. You will be asked to confirm the deletion.</p>
+            <h3>Can I see real-time updates?</h3>
+            <p>Currently, the app does not support real-time updates. Refresh the Inventory page to see the latest data.</p>
+            <h3>How to change chart types?</h3>
+            <p>On the Charts page, use the dropdown menu to select between Bar, Line, and Pie charts.</p>
+        </section>
+    </main>
+</body>
+</html>
